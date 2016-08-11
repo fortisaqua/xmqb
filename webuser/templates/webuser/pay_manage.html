@@ -1,0 +1,50 @@
+{% extends 'webuser/person_page.html' %}
+{% block title %}个人主页个人资料页面{% endblock %}
+{% block person_home_content %}
+    <style type="text/css">
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 10px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+        <h1 class="page-header"><small>工程管理</small></h1>
+
+     <table class="gridtable" cellpadding="0" cellspacing="0" >
+                    <thead>
+                    <tr>
+                        <th>项目编号</th>
+                        <th>项目名</th>
+                        <th>价格</th>
+                        <th>支付状态</th>
+                        <th>操作</th>
+                    </tr>
+                    {% for foo in pay %}
+                    <tr>
+                        <td>{{foo.project.Order_ID}}</td>
+                        <td>{{foo.project.name}}</td>
+                        <td>{{foo.price}}</td>
+                        <td>{% if foo.is_pay %}已支付 {% else %}未支付{% endif %}</td>
+                        <td>{% if not foo.is_pay %}<a href="">支付</a>{% else %}<a href="">查看</a>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                    </thead>
+     </table>
+{% endblock %}

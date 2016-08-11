@@ -1,0 +1,76 @@
+{% extends 'adminuser/person_page.html' %}
+{% block title %}个人主页个人资料页面{% endblock %}
+{% block person_home_content %}
+    <style type="text/css">
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 10px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+        <h1 class="page-header"><small>用户管理</small></h1>
+
+     <table class="gridtable" cellpadding="0" cellspacing="0" >
+                    <thead>
+                    <tr>
+                        <th>用户id</th>
+                        <th>用户名</th>
+                        <th>联系方式</th>
+                        <th>医院</th>
+                        <th>职位</th>
+                        <th>科室</th>
+                        <th>操作</th>
+                    </tr>
+                    {% for people in Users %}
+                        <tr>
+                        <td>{{ people.user_id }}</td>
+                        <td>{{ people.name }}</td>
+                        <td>{{ people.telephone }}</td>
+                        <td>{{ people.hospital }}</td>
+                        <td>{{ people.position }}</td>
+                        <td>{{ people.department }}</td>
+                        <td>
+                            <a href="javascript:deleteUser({{ people.user_id }})">删除</a>/
+                            <a href="javascript:person_change({{ people.user_id }})">修改资料</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </thead>
+
+     </table>
+<br> <br>
+    <div class="form-group">
+            <div  class="form-group-left">
+
+              </div>
+          </div>
+<script>
+
+    function deleteUser(user_id) {
+        if (confirm("您确定要删除么，记录删除后将无法找回")) {
+            location.href = "/delete_user/?user_id="+user_id;
+        }
+    }
+
+    function person_change(user_id) {
+        location.href = "/person_change/?user_id="+user_id;
+    }
+</script>
+{% endblock %}

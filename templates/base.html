@@ -1,0 +1,170 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="shortcut icon" href="{% static 'vimeo.ico' %}" type="image/x-icon">
+<link rel="icon" href="{% static 'vimeo.ico' %}" type="image/x-icon">
+    <title>{% block title %}基础页面{% endblock %}</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'css/reset.css' %}" rel="stylesheet">
+     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/common.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/person_home_info.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}"  rel="stylesheet">
+    <link href="{% static 'css/uploadify.css' %}" type="text/css" rel="stylesheet">
+    <script src="{% static 'lib/jquery-2.1.1.min.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <script src="{% static 'lib/holder.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+
+    <!-- Uploadify Core JavaScript -->
+    <script src="{% static 'js/jquery.uploadify.min.js' %}"></script>
+    <script src="{% static 'js/swfobject.js' %}"></script>
+    {% block head %}
+    {% endblock %}
+<script>
+
+    function del(file_name){
+        var regS = /\\/g;
+        b="\""+file_name.replace(regS,'\\\\')+"\"";
+        var reg = RegExp(b,"g");
+        $.post("/delete_uploadfile/", { delete_file: file_name } );
+        $("#id_dir").val(($("#id_dir").val().replace(reg,"")));
+}
+$(document).ready(function() {
+  $('#file_upload').uploadify({
+    'swf'  : '/static/js/uploadify.swf',//根据文件存放地址改变
+    'uploader'    : '/uploadify_script/',
+    'folder'    : '/uploadfile',
+    'auto'      : false,//false,//
+     'multi': true,//设置可以上传多个文件
+    'uploadLimit':20,
+     'buttonText':'选择文件',
+    'removeCompleted':false,//
+    'fileSizeLimit':'1024MB',//设置上传文件大小单位kb
+    'fileTypeExts':'*.doc;*.docx;*.odt;*.jpg;*.png;*.txt;*exe;',//设置上传文件类型为常用文档格式
+{#    'fileDesc':'支持文档格式',#}
+{#    'onInit': function () {},#}
+{#    'onUploadError' : function(file, errorCode, errorMsg, errorString) {#}
+{#        alert('The file ' + file.name + ' could not be uploaded: ' + errorString);#}
+{#    },#}
+    'onSelect': function (e, queueId, fileObj) {
+        $('#id_span_msg').html("");
+    },
+    'onCancel'    : function(event,ID,fileObj,data) {
+{#      $.post("/delete_uploadfile/", { delete_file: file_name } );#}
+    },
+    'onUploadComplete': function(file) {
+    },
+      'onUploadSuccess' : function(file, data, response) {
+          var regS = /\\\\/g;
+          b = data.replace(regS,"\\");
+          $("#" +file.id+" a:first-child").attr("onclick","javascript:del("+data+")");
+          $("#id_dir").val($("#id_dir").val()+b);
+          //这里写的id_dir就是连接到网页中id为id_dir的元素，这个id，如果是用forms类直接
+          //传到网页的话，id也就是基于forms.From中定义的类的变量名，比如这里的dir，就自动生成id_dir
+{#            alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response );#}
+        }
+  });
+})
+  function change_passwords() {
+      location.href = "/change_passwords/"
+  }
+
+</script>
+</head>
+<body>
+ {% csrf_token %}
+ <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target="#responsive-navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand"><strong>qiangben</strong>.com</a>
+            </div>
+            <div class="collapse navbar-collapse" id="responsive-navbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="">首页</a></li>
+                <li><a href="">项目展示</a></li>
+                <li><a href="http://qiangben.com/">关于我们</a></li>
+            </ul>
+            <a href="http://127.0.0.1:8000" title="收藏网站" class="btn btn-primary btn-sm navbar-btn navbar-right hidden-xs" onclick="window.external.addFavorite(this.href,this.title);return false;" >收藏网站</a>
+            {% block dropdowns %}
+            <div class="profile navbar-right">
+                <ul class="nav navbar-nav">
+                        {% if request.user.is_authenticated %}
+                        <li class="dropdown">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown">{{request.user}}<span class="caret"></span> </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/person" class="glyphicon glyphicon-user">个人资料</a> </li>
+                                <li><a href="/project" class="glyphicon glyphicon-edit">工程管理</a> </li>
+                                <li><a href="/pay" class="glyphicon glyphicon-th">支付管理</a> </li>
+                                <li><a href="/logout" class="glyphicon glyphicon-off">退出登录</a> </li>
+                            </ul>
+                        </li>
+                        {% else %}
+                         <li><a href="/weblogin" >登录</a></li>
+                        <li><a href="/register">注册</a></li>
+                        {% endif %}
+                    </ul>
+            </div>
+            {% endblock %}
+        </div>
+        </div>
+    </nav>
+
+
+
+
+{% block content %}
+    <div class="container">
+
+
+
+    </div>
+    {% block slideshow%}{% endblock%}
+{% block page_content%}{% endblock %}
+<!--footer开始-->
+    <div id="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8"> Copyright &copy; qiangben.com</div>
+            <div class="col-md-2">
+              <ul>
+                <li><a target="_blank"  href="">新浪微博</a></li>
+                <li><a target="_blank"  href="">腾讯微博</a></li>
+              </ul>
+            </div>
+            <div class="col-md-2">
+              <ul>
+                <li><a href="#">回到顶部</a></li>
+                <li><a href="#">联系我们</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!--footer结束 -->
+
+{% endblock %}
+
+
+
+
+{% block allfilms %}{% endblock %}
+{% block index%}{% endblock %}
+</body>
+</html>

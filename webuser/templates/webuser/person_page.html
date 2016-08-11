@@ -1,0 +1,39 @@
+{% extends "base.html"%}
+{% block title%} 个人主页 {% endblock%}
+
+
+{% block page_content %}
+    <!--主题内容-->
+        <div id="mainbody">
+        <div class="container">
+            <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                <div class="list-group">
+                    <a class="list-group-item selected" href="/person/">个人资料</a>
+                    <a class="list-group-item selected" href="/project">工程管理</a>
+                    <a class="list-group-item selected" href="/pay">支付管理</a>
+                    <a class="list-group-item selected" href="http://qiangben.com/">关于我们</a>
+                    <a class="list-group-item selected" href="#">意见反馈</a>
+                </div>
+                </div>
+            </div>
+
+                <!--显示左边菜单点击后的内容-->
+                <div class="col-md-9">
+                    <div class="container">
+                    {%block person_home_content%}
+                        <!--显示个人主页中间主要内容-->
+                        <!--end-->
+                    {%endblock%}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+            </div>
+    <!--主题内容结束-->
+
+
+{% endblock%}

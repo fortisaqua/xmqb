@@ -1,0 +1,60 @@
+{% extends "base.html"%}
+{% block title%} 个人主页 {% endblock%}
+
+{% block dropdowns %}
+
+    <div class="profile navbar-right">
+                <ul class="nav navbar-nav">
+                        {% if request.user.is_authenticated %}
+                        <li class="dropdown">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown">{{request.user}}<span class="caret"></span> </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/person/" class="glyphicon glyphicon-user">管理员资料</a> </li>
+                                <li><a href="" class="glyphicon glyphicon-edit">工程管理</a> </li>
+                                <li><a href="" class="glyphicon glyphicon-th">订单管理</a> </li>
+                                <li><a href="/logout" class="glyphicon glyphicon-off">退出登录</a> </li>
+                            </ul>
+                        </li>
+                        {% else %}
+                         <li><a href="weblogin" >登录</a></li>
+                        <li><a href="register">注册</a></li>
+                        {% endif %}
+                    </ul>
+            </div>
+
+{% endblock %}
+
+{% block page_content %}
+    <!--主题内容-->
+        <div id="mainbody">
+        <div class="container">
+            <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                <div class="list-group">
+                    <a class="list-group-item selected" href="/person/">管理员资料</a>
+                    <a class="list-group-item selected" href="/user_manage/">用户管理</a>
+                    <a class="list-group-item selected" href="/super_pay_manage/">订单管理</a>
+                    <a class="list-group-item selected" href="">工程管理</a>
+                </div>
+                </div>
+            </div>
+
+                <!--显示左边菜单点击后的内容-->
+                <div class="col-md-9">
+                    <div class="container">
+                    {%block person_home_content%}
+                        <!--显示个人主页中间主要内容-->
+                        <!--end-->
+                    {%endblock%}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+            </div>
+    <!--主题内容结束-->
+
+
+{% endblock%}

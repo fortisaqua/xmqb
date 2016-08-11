@@ -1,0 +1,67 @@
+{% extends 'webuser/person_page.html' %}
+{% block title %}个人主页个人资料页面{% endblock %}
+{% block person_home_content %}
+    <div class="col-md-6 container">
+        <h1 class="page-header"><small>创建项目</small></h1>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+            <form role="form" class="ProjectForm " method="post" role="form">
+                  {% csrf_token %}
+                <fieldset>
+                    {% for field in form.visible_fields %}
+        <div class="form-group{% if field.errors %} has-error{% endif %}">
+          <label for="{{ field.label }}">{{ field.label }}</label>
+        {% if field.name == 'Oder_id' %}
+            <div style="display: none;" >{{ field }}</div>
+        {% elif field.name == 'dir'%}
+          <div style="display: none;" >{{ field }}</div>
+            <div class="demo-box">
+    <input id="file_upload" type="file" name="Filedata">
+    <div id="file_uploadQueue" class="uploadifyQueue"></div>
+     <a href="javascript:$('#file_upload').uploadify('upload','*')">上传</a>
+    <p><span id="id_span_msg"></span></p>
+            </div>
+         {% else %}
+            {{ field }}
+        {% endif %}
+          {% if field.help_text %}
+            <span class="help-block">{{ field.help_text|safe }}</span>
+          {% endif %}
+          {% for error in field.errors %}
+            <label class="control-label">{{ error }}</label>
+          {% endfor %}
+        </div>
+      {% endfor %}
+        {% for field in form.visible_fields %}
+                {% for error in field.errors %}
+                    <script>
+                 $("#id_dir").val("");
+                    //这里的for循环就需要很注意，form表单展示出来的时候就是for循环，所以在for循环没循环到指定位置的时候，
+                    //对这个指定位置所做的操作是无效的，比如这里，想要触发清空dir字段的操作，必须要在上面的for循环结束之后
+                    //再做，因为就算是在for循环里dir字段之前的字段发生错误触发这个清空操作，dir字段的id是找不到的，因为它还没有
+                    //被展示在网页里，所以只有在所有的filed展示出来，即以代码的形式通过for循环展示到网页中之后，定位dir字段id的
+                    //的操作才会绝对有效
+              </script>
+                {% endfor %}
+                {% endfor %}
+
+                </fieldset>
+
+        <div class="form-group">
+            <div  class="form-group-left">
+              <button type="submit" class="btn btn-large btn-primary">提交资料</button>
+
+              </div>
+          </div>
+
+             </form>
+        </div>
+{% endblock %}
